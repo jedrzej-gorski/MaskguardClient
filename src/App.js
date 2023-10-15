@@ -13,7 +13,7 @@ function App() {
     const payload = JSON.stringify({
       image: base64img
     })
-    const response = await fetch("http://localhost:5001/predict", {
+    const response = await fetch("http://api.mask-guard.net/predict", {
       method: 'post',
       body: payload,
       headers: { "Content-Type": "application/json" }
@@ -24,7 +24,10 @@ function App() {
       localStorage.setItem("token", json.token)
       localStorage.setItem("expirationDate", json.expirationDate)
       setToken(json.token)
+      setExpirationDate(json.expirationDate)
       setImgSrc(null)
+    } else {
+      alert(`predicted class: ${json['predicted-class']}`)
     }
   }
 
@@ -40,9 +43,7 @@ function App() {
   useEffect(() => {
     const callback = setInterval(
       () => {
-        console.log({ expirationDate });
         const unixTime = Math.floor(Date.now() / 1000);
-        console.log({ unixTime })
         if (expirationDate && expirationDate < unixTime) {
           clearToken()
         }
