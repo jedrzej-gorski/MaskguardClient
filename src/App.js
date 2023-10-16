@@ -13,10 +13,10 @@ function App() {
     const payload = JSON.stringify({
       image: base64img
     })
-    const response = await fetch("http://api.mask-guard.net/predict", {
+    const response = await fetch("https://api.mask-guard.net/predict", {
       method: 'post',
       body: payload,
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
     })
     const json = await response.json();
     console.log(json);
