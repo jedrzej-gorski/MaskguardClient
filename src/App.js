@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Button from "./components/Button";
 import Modal from "./components/Modal";
 import QRPage from "./components/QRPage";
+import Topbar from "./components/Topbar";
 import { Toaster, toast } from "react-hot-toast";
 
 const AppContainer = styled.div`
@@ -44,14 +45,21 @@ function App() {
     const payload = JSON.stringify({
       image: base64img,
     });
-    const response = await fetch("http://localhost:5000/predict", {
-      method: "post",
-      body: payload,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
+    var response = undefined
+    try {
+      response = await fetch("http://localhost:5000/predict", {
+        method: "post",
+        body: payload,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    } catch (e) {
+          toast.error("Something went wrong. Please try again");
+          setImgSrc(null)
+          return
+    }
     const json = await response.json();
     if (json.token) {
       localStorage.setItem("token", json.token);
@@ -72,7 +80,7 @@ function App() {
           );
           break;
         default:
-          toast.error("Something went wrong. Please try again");
+          toast.error("Please capture your face inside the picture");
       }
       setImgSrc(null);
     }
@@ -115,7 +123,8 @@ function App() {
 
   return (
     <AppContainer>
-      <Toaster />
+      <Toaster containerStyle={{top: 85}}/>
+      <Topbar />
       {!token && (
         <>
           <Webcam
