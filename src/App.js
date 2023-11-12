@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { QRCodeSVG } from "qrcode.react";
 import Webcam from "react-webcam";
 import styled from "styled-components";
-import CountDown, { zeroPad } from "react-countdown";
+import Button from "./components/Button";
+import Modal from "./components/Modal";
+import QRPage from "./components/QRPage";
 import { Toaster, toast } from "react-hot-toast";
 
 const AppContainer = styled.div`
@@ -23,95 +24,11 @@ const AppContainer = styled.div`
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 `;
 
-const Button = styled.button`
-  padding: 10px;
-  background-color: #88CFF9;
-  color: #122c34;
-  border-radius: 8px;
-  border-color: #122c34;
-  border-width: 4px;
-  font-weight: bold;
-  font-size: 1.5rem;
-  min-width: 100px;
-  cursor: pointer;
-`;
-
 const CaptureButton = styled(Button)`
   position: absolute;
   bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
-`;
-
-const Modal = styled.div`
-  z-index: 10;
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border-radius: 16px;
-  padding: 12px;
-  max-height: 90%;
-  box-sizing: border-box;
-  width: 90%;
-  max-width: 1024px;
-`;
-
-const Overlay = styled.div`
-  background-color: rgba(0, 0, 0, 0.6);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-`;
-
-const CapturedImage = styled.img`
-  height: 100%;
-  width: 100%;
-  object-fit: contain;
-  border-radius: 16px;
-`;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  padding: 12px 0px 12px 0px;
-  max-width: 600px;
-  width: 100%;
-`;
-
-const QRWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: stretch;
-  height: 100%;
-`;
-
-const StyledQRCode = styled(QRCodeSVG)`
-  padding: 20px;
-  width: 100%;
-  height: auto;
-  box-sizing: border-box;
-`;
-
-const Header = styled.h1`
-  font-size: 1.75rem;
-  text-align: center;
-  font-weight: bold;
-`;
-
-const Counter = styled.div`
-  font-size: 1.5rem;
-  padding-bottom: 12px;
 `;
 
 function App() {
@@ -199,7 +116,7 @@ function App() {
   return (
     <AppContainer>
       <Toaster />
-      {!imgSrc && !token && (
+      {!token && (
         <>
           <Webcam
             audio={false}
@@ -216,32 +133,14 @@ function App() {
         </>
       )}
       {imgSrc && !token && (
-        <>
-          <Overlay onClick={() => setImgSrc(null)} />
-          <Modal>
-            <CapturedImage src={imgSrc} alt="captured camera input" />
-            <ButtonWrapper>
-              <Button onClick={() => setImgSrc(null)}>Discard</Button>
-              <Button onClick={() => submitImage(imgSrc)}>Send</Button>
-            </ButtonWrapper>
-          </Modal>
-        </>
+        <Modal
+          onClose={() => setImgSrc(null)}
+          onConfirm={() => submitImage(imgSrc)}
+          imgSrc={imgSrc}
+        />
       )}
       {token && (
-        <QRWrapper>
-          <Header>Your access code is ready</Header>
-          <StyledQRCode value={token} bgColor="#00000000" />
-          <Counter>
-            {"The token will expire in "}
-            <CountDown
-              renderer={({ minutes, seconds }) =>
-                `${minutes}:${zeroPad(seconds)}`
-              }
-              date={expirationDate * 1000}
-            />
-          </Counter>
-          <Button onClick={clearToken}>Renew</Button>
-        </QRWrapper>
+        <QRPage token={token} expirationDate={expirationDate} onRenew={clearToken} />
       )}
     </AppContainer>
   );
