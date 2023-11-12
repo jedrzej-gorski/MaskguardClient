@@ -141,13 +141,12 @@ function App() {
           <CaptureButton onClick={capture}>Capture photo</CaptureButton>
         </>
       )}
-      {imgSrc && !token && (
         <Modal
+          isOpen={imgSrc && !token}
           onClose={() => setImgSrc(null)}
           onConfirm={() => submitImage(imgSrc)}
           imgSrc={imgSrc}
         />
-      )}
       {token && (
         <QRPage token={token} expirationDate={expirationDate} onRenew={clearToken} />
       )}

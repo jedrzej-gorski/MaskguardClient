@@ -1,7 +1,8 @@
-import styled from 'styled-components';
-import Button from './Button';
+import styled from "styled-components";
+import Button from "./Button";
+import { motion, AnimatePresence } from "framer-motion";
 
-const PopUp = styled.div`
+const PopUp = styled(motion.div)`
   z-index: 10;
   position: absolute;
   display: flex;
@@ -46,20 +47,28 @@ const ButtonWrapper = styled.div`
   width: 100%;
 `;
 
-const Modal = ({onClose, onConfirm, imgSrc}) => {
-
-    return (
-        <>
-          <Overlay onClick={onClose} />
-          <PopUp>
+const Modal = ({ isOpen, onClose, onConfirm, imgSrc }) => {
+  return (
+    <>
+      {isOpen && <Overlay onClick={onClose} />}
+      <AnimatePresence>
+        {isOpen && (
+          <PopUp
+            initial={{ transform: "translate(-50%, -150%)", opacity: 0 }}
+            animate={{ transform: "translate(-50%, -50%)", opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            exit={{ transform: "translate(-50%, 150%)" }}
+          >
             <CapturedImage src={imgSrc} alt="captured camera input" />
             <ButtonWrapper>
               <Button onClick={onClose}>Discard</Button>
               <Button onClick={onConfirm}>Send</Button>
             </ButtonWrapper>
           </PopUp>
-        </>
-    )
-}
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
 
 export default Modal;
