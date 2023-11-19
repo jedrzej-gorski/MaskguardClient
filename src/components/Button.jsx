@@ -2,13 +2,12 @@ import styled from 'styled-components'
 
 const StyledButton = styled.button`
   padding: 10px;
-  background-color: #88CFF9;
+  background-color: #2033e3;
+  border-radius: 7px;
   color: #122c34;
-  border-radius: 8px;
-  border-color: #122c34;
-  border-width: 4px;
-  font-weight: bold;
   font-size: 1.5rem;
+  color: #FFFFFF;
+  border: none;
   min-width: 100px;
   transition: all 0.2s;
   cursor: pointer;
