@@ -49,12 +49,11 @@ function App() {
     });
     var response = undefined
     try {
-      response = await fetch("http://localhost:5000/predict", {
+      response = await fetch("https://api.mask-guard.net/predict/", {
         method: "post",
         body: payload,
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
         },
       });
     } catch (e) {
