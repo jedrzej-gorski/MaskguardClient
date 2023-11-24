@@ -1,43 +1,47 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
 import styled from "styled-components";
-import Button from "./components/Button";
+import Button from "@mui/material/Button";
 import Modal from "./components/Modal";
 import QRPage from "./components/QRPage";
 import Topbar from "./components/Topbar";
+import InfoButton from "./components/InfoButton";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import InfoDrawer from "./components/InfoDrawer";
 import { Toaster, toast } from "react-hot-toast";
 import {Image} from 'image-js'
 
 const AppContainer = styled.div`
-  height: 100vh;
+  height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+  align-items: center;
   flex-direction: column;
-  background: #c9d6ff; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    70deg,
-    #e2e2e2,
-    #c9d6ff
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    70deg,
-    #e2e2e2,
-    #c9d6ff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #FFFFFF;
 `;
 
 const CaptureButton = styled(Button)`
-  position: absolute;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 180px;
 `;
 
+const muiTheme = createTheme({
+    palette: {
+        primary: {
+            main: '#160be0',
+        },
+        secondary: {
+            main: '#0280ee',
+        },
+    },
+});
+
 function App() {
+  const [isDrawerShowing, setDrawerShowing] = useState(null);
   const [token, setToken] = useState(null);
   const [expirationDate, setExpirationDate] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
   const [toastId, setToastId] = useState(null) // used to notify user if camera input gets too dark
+  const [selectedTab, changeSelectedTab] = useState(null);
   const webcamRef = useRef(null);
 
   const submitImage = async (base64img) => {
@@ -156,7 +160,7 @@ function App() {
   return (
     <AppContainer>
       <Toaster containerStyle={{top: 85}}/>
-      <Topbar />
+      <Topbar selectedTab={selectedTab} changeSelectedTab={changeSelectedTab}/>
       {!token && (
         <>
           <Webcam
@@ -165,12 +169,17 @@ function App() {
             screenshotFormat="image/jpeg"
             videoConstraints={{ facingMode: "user" }}
             style={{
-              width: "100%",
-              height: "100%",
-              margin: 0,
+              width: "50%",
+              height: "50%",
+              margin: '20px',
             }}
           />
           <CaptureButton onClick={capture} disabled={toastId!=null}>Capture photo</CaptureButton>
+          <ThemeProvider theme={muiTheme}>
+                    <CaptureButton variant="contained" disabled={toastId!=null} onClick={capture}>Capture photo</CaptureButton>
+                    <InfoButton isShown={isDrawerShowing} toggleShownUpdate={setDrawerShowing} pathLength={300}></InfoButton>
+          </ThemeProvider>
+          <InfoDrawer isShown={isDrawerShowing} size={300}></InfoDrawer>
         </>
       )}
         <Modal

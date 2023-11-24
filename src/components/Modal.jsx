@@ -1,6 +1,8 @@
 import styled from "styled-components";
-import Button from "./Button";
+import Button from "@mui/material/Button";
 import { motion, AnimatePresence } from "framer-motion";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import muiTheme from '../theme.js';
 
 const PopUp = styled(motion.div)`
   z-index: 10;
@@ -61,8 +63,10 @@ const Modal = ({ isOpen, onClose, onConfirm, imgSrc }) => {
           >
             <CapturedImage src={imgSrc} alt="captured camera input" />
             <ButtonWrapper>
-              <Button onClick={onClose}>Discard</Button>
-              <Button onClick={onConfirm}>Send</Button>
+              <ThemeProvider theme={muiTheme}>
+                  <Button variant="contained" sx={{bgcolor: 'primary.main'}} onClick={onClose}>Discard</Button>
+                  <Button variant="contained" sx={{bgcolor: 'primary.main'}} onClick={onConfirm}>Send</Button>
+              </ThemeProvider>
             </ButtonWrapper>
           </PopUp>
         )}
