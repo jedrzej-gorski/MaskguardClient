@@ -14,6 +14,13 @@ const StyledButton = styled.button`
   &:hover {
     background-color: #a0d9fa;
   }
+
+  &:disabled {
+    cursor: default;
+    background-color: lightgray;
+    color: gray;
+    border-color: gray;
+  }
   `
 
 const Button = ({ children, ...props }) => {

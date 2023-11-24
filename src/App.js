@@ -9,6 +9,7 @@ import InfoButton from "./components/InfoButton";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import InfoDrawer from "./components/InfoDrawer";
 import { Toaster, toast } from "react-hot-toast";
+import {Image} from 'image-js'
 
 const AppContainer = styled.div`
   height: 100%;
@@ -39,6 +40,7 @@ function App() {
   const [token, setToken] = useState(null);
   const [expirationDate, setExpirationDate] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
+  const [toastId, setToastId] = useState(null) // used to notify user if camera input gets too dark
   const [selectedTab, changeSelectedTab] = useState(null);
   const webcamRef = useRef(null);
 
@@ -51,12 +53,11 @@ function App() {
     });
     var response = undefined
     try {
-      response = await fetch("http://localhost:5000/predict", {
+      response = await fetch("https://api.mask-guard.net/predict/", {
         method: "post",
         body: payload,
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
         },
       });
     } catch (e) {
@@ -90,6 +91,18 @@ function App() {
     }
   };
 
+  const getImageIllumination = async (imageSrc) => {
+    const image = await Image.load(imageSrc)
+    const {data, width, height} = image
+    let totalIntensity = 0;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const intensity = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      totalIntensity += intensity;
+    }
+    return totalIntensity/ (width * height)
+  }
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const expirationDate = localStorage.getItem("expirationDate");
@@ -114,15 +127,34 @@ function App() {
     return () => clearInterval(callback);
   }, [expirationDate, setExpirationDate, setToken]);
 
+  useEffect(() => {
+    const callback = setInterval(async () => {
+      const imageSrc = webcamRef.current.getScreenshot();
+      const intensity = await getImageIllumination(imageSrc)
+      if (intensity < 60) {
+        if (!toastId) {
+          const toastid = toast.loading("Your camera input is too dark. Please take the photo in a well-lit place")
+          setToastId(toastid)
+        }
+      } else{
+        toast.dismiss()
+        setToastId(null)
+      }
+    }, 2000);
+
+    return () => clearInterval(callback);
+  }, [toastId]);
+
   const clearToken = () => {
     setToken(null);
     setExpirationDate(null);
     localStorage.clear();
   };
 
-  const capture = useCallback(() => {
+  const capture = useCallback(async () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImgSrc(imageSrc);
+
   }, [webcamRef, setImgSrc]);
 
   return (
@@ -142,8 +174,9 @@ function App() {
               margin: '20px',
             }}
           />
+          <CaptureButton onClick={capture} disabled={toastId!=null}>Capture photo</CaptureButton>
           <ThemeProvider theme={muiTheme}>
-                    <CaptureButton variant="contained" onClick={capture}>Capture photo</CaptureButton>
+                    <CaptureButton variant="contained" disabled={toastId!=null} onClick={capture}>Capture photo</CaptureButton>
                     <InfoButton isShown={isDrawerShowing} toggleShownUpdate={setDrawerShowing} pathLength={300}></InfoButton>
           </ThemeProvider>
           <InfoDrawer isShown={isDrawerShowing} size={300}></InfoDrawer>
