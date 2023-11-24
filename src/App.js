@@ -39,6 +39,7 @@ function App() {
   const [token, setToken] = useState(null);
   const [expirationDate, setExpirationDate] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
+  const [selectedTab, changeSelectedTab] = useState(null);
   const webcamRef = useRef(null);
 
   const submitImage = async (base64img) => {
@@ -127,7 +128,7 @@ function App() {
   return (
     <AppContainer>
       <Toaster containerStyle={{top: 85}}/>
-      <Topbar />
+      <Topbar selectedTab={selectedTab} changeSelectedTab={changeSelectedTab}/>
       {!token && (
         <>
           <Webcam

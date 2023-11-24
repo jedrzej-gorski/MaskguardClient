@@ -1,11 +1,13 @@
 import styled from "styled-components"
 import Box from '@mui/material/Box';
+import Tab from "./Tab"
+import { MdHome } from "react-icons/md";
 
 const Bar = styled.div`
     top: 0px;
     height: 80px;
     width: 100vw;
-    background-color: #0280ee;
+    background-color: #FFFFFF;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -18,12 +20,24 @@ const Bar = styled.div`
 
 const Logo = styled.span`
     color: #122c34;
+    font-family: Bavro;
 `
 
-const Topbar = (props) => {
+const Topbar = ({selectedTab, changeSelectedTab}) => {
+
+    const updateTab = (id) => {
+        return () => {changeSelectedTab(id)};
+    }
+
     return (
-        <Box {...props} component={Bar}>
-            <Logo style={{color: '#FFFFFF'}}>MASKGUARD</Logo>
+        <Box component={Bar}>
+            <Logo style={{color: '#0280ee'}}>MASKGUARD</Logo>
+            <div className="tab-container">
+                <Tab caption={"Home"} Icon={MdHome} className={selectedTab === 1 ? "selected-tab" : "tab"} onClick={updateTab(1)} id={1}>
+                </Tab>
+                <Tab caption={"About"} Icon={MdHome} className={selectedTab === 2 ? "selected-tab" : "tab"} onClick={updateTab(2)} id={2}>
+                </Tab>
+            </div>
             </Box>
     )
 }

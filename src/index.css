@@ -10,6 +10,13 @@ html, body {
     overflow-x: hidden;
 }
 
+@font-face {
+    font-family: "Bavro";
+    src: local("Bavro"),
+    url("./fonts/Bavro/Bavro-Regular.ttf") format("truetype");
+    font-weight: bold;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -32,4 +39,33 @@ code {
 .header {
     display: flex;
     align-items: center;
+}
+
+.selected-tab {
+    color: #0280ee;
+}
+
+.single-tab-container {
+    display: flex;
+    align-items: end;
+}
+
+.tab-icon {
+    position: relative;
+    top: -20px
+}
+
+.tab {
+    color: grey;
+}
+
+.page-title {
+    width: fit-content;
+}
+
+.tab-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
 }
