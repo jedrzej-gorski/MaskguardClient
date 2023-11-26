@@ -7,9 +7,9 @@ import QRPage from "./components/QRPage";
 import Topbar from "./components/Topbar";
 import InfoButton from "./components/InfoButton";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import InfoDrawer from "./components/InfoDrawer";
 import { Toaster, toast } from "react-hot-toast";
 import {Image} from 'image-js'
+import InfoBox from "./components/InfoBox";
 
 const AppContainer = styled.div`
   height: 100%;
@@ -17,11 +17,21 @@ const AppContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
-  background: #FFFFFF;
+`;
+
+const UIContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  grid-template-rows: 1fr;
+  grid-template-areas:
+    "webcam help"
 `;
 
 const CaptureButton = styled(Button)`
   width: 180px;
+  height: 50px;
 `;
 
 const muiTheme = createTheme({
@@ -92,6 +102,9 @@ function App() {
   };
 
   const getImageIllumination = async (imageSrc) => {
+    if (imageSrc == null) {
+      return 255
+    }
     const image = await Image.load(imageSrc)
     const {data, width, height} = image
     let totalIntensity = 0;
@@ -174,12 +187,13 @@ function App() {
               margin: '20px',
             }}
           />
-          <CaptureButton onClick={capture} disabled={toastId!=null}>Capture photo</CaptureButton>
           <ThemeProvider theme={muiTheme}>
-                    <CaptureButton variant="contained" disabled={toastId!=null} onClick={capture}>Capture photo</CaptureButton>
-                    <InfoButton isShown={isDrawerShowing} toggleShownUpdate={setDrawerShowing} pathLength={300}></InfoButton>
+            <div className="button-container" style={{minWidth: '220px', width: '50%', height: '75px'}}>
+              <CaptureButton sx={{marginLeft: "auto"}} variant="contained" disabled={toastId!=null} onClick={capture}>Capture photo</CaptureButton>
+              <InfoButton isShown={isDrawerShowing} toggleShownUpdate={setDrawerShowing} pathLength={300}></InfoButton>
+            </div>
           </ThemeProvider>
-          <InfoDrawer isShown={isDrawerShowing} size={300}></InfoDrawer>
+          <InfoBox isShown={isDrawerShowing}></InfoBox>
         </>
       )}
         <Modal

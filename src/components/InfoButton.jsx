@@ -1,20 +1,51 @@
 import IconButton from '@mui/material/IconButton';
 import {useState, useEffect} from "react";
 import { useSpring, animated, useSpringRef, useChain } from "react-spring";
-import { MdInfo } from "react-icons/md";
-import  InfoClose from "./info-close";
-import { IoMdCloseCircle } from "react-icons/io";
+import { MdHelp as MdInfo } from "react-icons/md";
+import {styled as materialStyled} from "@mui/system"
 import styled from "styled-components";
 
-const StyledIconButton = styled(animated.div)`
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    top: 40px;
-    right: -1px;
-    z-index: 1;
-`;
 
+const StyledIconButton = materialStyled(IconButton)({
+    height: '75px',
+    width: '75px',
+    marginLeft: 'auto',
+    backgroundColor: '#FFFFFF',
+    position: 'relative',
+    '&:before, &:after': {
+        content: '""',
+        position: 'absolute',
+        width: '15px',
+        height: '15px',
+        transition: '.45s ease-in-out',
+    },
+    '&:before': {
+        borderTopLeftRadius: '5px',
+        top: '0',
+        left: '0',
+        borderTop: '2px solid rgba(41, 121, 255, 0.45)',
+        borderLeft: '2px solid rgba(41, 121, 255, 0.45)',
+    },
+    '&:after': {
+        borderBottomRightRadius: '5px',
+        right: '0',
+        bottom: '0',
+        borderRight: '2px solid rgba(41, 121, 255, 0.45)',
+        borderBottom: '2px solid rgba(41, 121, 255, 0.45)',
+    },
+    '&:hover::before, &:hover::after': {
+        width: 'calc(100% - 2px)',
+        height: 'calc(100% - 2px)',
+        borderRadius: '5px',
+    }
+});
+
+const BorderDiv = styled.div`
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    transition: .3s ease-in-out;
+`;
 
 
 const InfoButton = ({ isShown, toggleShownUpdate, pathLength }) => {
@@ -24,35 +55,9 @@ const InfoButton = ({ isShown, toggleShownUpdate, pathLength }) => {
       toggleShownUpdate(!isShown);
     };
 
-    const transformRef = useSpringRef()
-    const transform = useSpring({
-        ref: transformRef,
-        transform: isShown? `translateX(-${pathLength}px)` : `translateX(0px)`,
-        config: {mass: 1,
-                 friction: 26,
-                 tension: 170,},
-    })
-    const backTransformRef = useSpringRef()
-    const backTransform = useSpring({
-        ref: backTransformRef,
-        transform: isShown? `translateX(50px)` : `translateX(0px)`,
-        config: {mass: 1,
-                 friction: 26,
-                 tension: 170,},
-    })
-    useChain(isShown ? [transformRef, backTransformRef] : [backTransformRef, transformRef]);
     return  (
-        <StyledIconButton style={backTransform}>
-        <StyledIconButton style={transform}>
-                <IconButton variant="contained" onClick={handleToggleDrawer} sx={{bgcolor: 'primary.main',
-                    borderBottomRightRadius: '0px',
-                    borderBottomLeftRadius: '5px',
-                    borderTopRightRadius: '0px',
-                    borderTopLeftRadius: '5px'}}
-                style={{position: 'fixed'}}>
-                    <InfoClose height={34} width={34} isOpen={isShown}></InfoClose>
-                </IconButton>
-        </StyledIconButton>
+        <StyledIconButton variant="contained" onClick={handleToggleDrawer}>
+            <MdInfo size={60} color={'#2979FF'}></MdInfo>
         </StyledIconButton>
     );
 
