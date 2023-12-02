@@ -1,49 +1,30 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import Webcam from "react-webcam";
+import WrappedWebcam from "./components/WrappedWebcam"
 import styled from "styled-components";
-import Button from "@mui/material/Button";
 import Modal from "./components/Modal";
 import QRPage from "./components/QRPage";
 import Topbar from "./components/Topbar";
+import { useThrottledWindowSize } from "./components/maskguardhooks"
 import InfoButton from "./components/InfoButton";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Toaster, toast } from "react-hot-toast";
-import {Image} from 'image-js'
+import {Image} from 'image-js';
 import InfoBox from "./components/InfoBox";
+import Button from "@mui/material/Button";
 
 const AppContainer = styled.div`
   height: 100%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
 `;
 
-const UIContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  grid-template-rows: 1fr;
-  grid-template-areas:
-    "webcam help"
-`;
-
 const CaptureButton = styled(Button)`
-  width: 180px;
-  height: 50px;
+  width: 50%;
+  height: 100%;
 `;
 
-const muiTheme = createTheme({
-    palette: {
-        primary: {
-            main: '#160be0',
-        },
-        secondary: {
-            main: '#0280ee',
-        },
-    },
-});
 
 function App() {
   const [isDrawerShowing, setDrawerShowing] = useState(null);
@@ -52,8 +33,11 @@ function App() {
   const [imgSrc, setImgSrc] = useState(null);
   const [toastId, setToastId] = useState(null) // used to notify user if camera input gets too dark
   const [selectedTab, changeSelectedTab] = useState(null);
+  const size = useThrottledWindowSize(300);
+  const ratio = size.width / size.height;
   const webcamRef = useRef(null);
 
+  
   const submitImage = async (base64img) => {
     if (!base64img) {
       return;
@@ -176,24 +160,13 @@ function App() {
       <Topbar selectedTab={selectedTab} changeSelectedTab={changeSelectedTab}/>
       {!token && (
         <>
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            videoConstraints={{ facingMode: "user" }}
-            style={{
-              width: "50%",
-              height: "50%",
-              margin: '20px',
-            }}
-          />
-          <ThemeProvider theme={muiTheme}>
-            <div className="button-container" style={{minWidth: '220px', width: '50%', height: '75px'}}>
-              <CaptureButton sx={{marginLeft: "auto"}} variant="contained" disabled={toastId!=null} onClick={capture}>Capture photo</CaptureButton>
+          <WrappedWebcam ratio={ratio} ref={webcamRef}>
+
+          </WrappedWebcam>
+            <div className="button-container" style={{minWidth: '220px', height: '8%', marginBottom: '1%'}}>
+              <CaptureButton sx={{marginLeft: "auto", fontSize: "4vh"}} variant="contained" disabled={toastId!=null} onClick={capture}>Capture photo</CaptureButton>
               <InfoButton isShown={isDrawerShowing} toggleShownUpdate={setDrawerShowing} pathLength={300}></InfoButton>
             </div>
-          </ThemeProvider>
-          <InfoBox isShown={isDrawerShowing}></InfoBox>
         </>
       )}
         <Modal

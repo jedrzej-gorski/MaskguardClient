@@ -6,21 +6,27 @@
 
 html, body {
     max-width: 100%;
+    min-height: fit-content;
     width: 100%;
     overflow-x: hidden;
+    height: 100%
     }
+
+#root {
+    height: 100%;
+}
 
 @font-face {
     font-family: "Bavro";
     src: local("Bavro"),
-    url("./fonts/Bavro/Bavro-Regular.ttf") format("truetype");
+    url("./fonts/Bavro/Bavro-Regular.woff") format("woff");
     font-weight: bold;
 }
 
 @font-face {
     font-family: "Metropolis";
     src: local("Metropolis"),
-    url("fonts/Metropolis/Metropolis-Regular.otf") format("opentype");
+    url("fonts/Metropolis/Metropolis-Regular.woff") format("woff");
     font-weight: normal;
 }
 
@@ -50,18 +56,24 @@ code {
     align-items: center;
 }
 
+.not-selected-tab {
+    color: grey;
+}
+
 .selected-tab {
     color: #2979FF;
 }
 
 .tab {
-    color: grey;
+
 }
 
+
 .tab-icon {
-    font-size: 42px;
-    position: relative;
-    bottom: 2px;
+    font-size: min(8vmax, 51px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .page-title {
@@ -73,12 +85,22 @@ code {
     flex-direction: row;
     justify-content: space-evenly;
     width: 100%;
+    height: 100%;
 }
 
 .button-container {
     position: relative;
+    width: 90%;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    margin: 20px;
+}
+
+.webcam {
+    height: 60%;
+}
+
+.loading-webcam::before {
+    height: 100%;
+    width: 100%;
+    background-color: black;
 }

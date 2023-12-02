@@ -7,16 +7,16 @@ import styled from "styled-components";
 
 
 const StyledIconButton = materialStyled(IconButton)({
-    height: '75px',
-    width: '75px',
+    height: '100%',
+    width: '',
     marginLeft: 'auto',
     backgroundColor: '#FFFFFF',
     position: 'relative',
     '&:before, &:after': {
         content: '""',
         position: 'absolute',
-        width: '15px',
-        height: '15px',
+        width: '25%',
+        height: '25%',
         transition: '.45s ease-in-out',
     },
     '&:before': {
@@ -40,24 +40,15 @@ const StyledIconButton = materialStyled(IconButton)({
     }
 });
 
-const BorderDiv = styled.div`
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    transition: .3s ease-in-out;
-`;
-
 
 const InfoButton = ({ isShown, toggleShownUpdate, pathLength }) => {
-    const [, updateState] = useState();
-
     const handleToggleDrawer = () => {
       toggleShownUpdate(!isShown);
     };
 
     return  (
         <StyledIconButton variant="contained" onClick={handleToggleDrawer}>
-            <MdInfo size={60} color={'#2979FF'}></MdInfo>
+            <MdInfo color={'#2979FF'}></MdInfo>
         </StyledIconButton>
     );
 

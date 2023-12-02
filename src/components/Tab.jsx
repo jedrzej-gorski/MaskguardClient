@@ -5,9 +5,10 @@ import {useState} from "react";
 
 
 const Tab = (props) => {
-    const {caption, Icon, className, onClick, ...other} = props;
+    const {caption, Icon, selectedTab, onClick, id, ...other} = props;
     const [animationPhase, setAnimationPhase] = useState(0);
     const stages = ['rotate(0deg)', 'rotate(-10deg)', 'rotate(10deg)']
+    const activationClass = selectedTab === id ? 'selected-tab' : 'not-selected-tab'
     const activateAnimation = () => {
         setAnimationPhase(1)
         onClick()
@@ -32,11 +33,15 @@ const Tab = (props) => {
     });
 
     return (
-            <Button sx={{minWidth: '110px', minHeight: '80px', width: '50%'}} onClick={activateAnimation} className="single-tab-container">
-                <animated.div style={{display: 'flex', alignItems: 'flex-end', ...shakeTransform}}>
-                    <Icon {...other} className={`${className} tab-icon` }/>
+            <Button onClick={activateAnimation} sx={{padding: '0 0',
+                minWidth: '110px',
+                width: '50%',
+                height: '100%',
+                lineHeight: 'normal'}}>
+                <animated.div style={{display: 'flex', flexDirection:'column', alignItems: 'flex-end', ...shakeTransform}}>
+                    <Icon {...other} className={`${activationClass} tab-icon` }/>
                 </animated.div>
-                <Typography sx={{fontSize: '2.3em', height: '42px', fontFamily: 'Metropolis', fontWeight: 'normal'}} {...other} className={`${className}`}>{caption}</Typography>
+                <Typography sx={{fontSize: 'min(7vmax, 45px)', lineHeight: 'normal', fontFamily: 'Metropolis', fontWeight: 'normal'}} {...other} className={`${activationClass}`}>{caption}</Typography>
             </Button>
 
     )
