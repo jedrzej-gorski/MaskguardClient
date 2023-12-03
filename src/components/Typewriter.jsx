@@ -15,7 +15,7 @@ const Typewriter = ({ text, delay }) => {
         }
     }, [currentIndex, delay, text]);
 
-    return {currentText};
+    return currentText;
 };
 
 export default Typewriter;

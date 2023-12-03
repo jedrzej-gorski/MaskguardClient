@@ -70,10 +70,12 @@ code {
 
 
 .tab-icon {
-    font-size: min(8vmax, 51px);
+    font-size: min(8vmin, 51px);
     display: flex;
     flex-direction: row;
     align-items: center;
+    min-width: 22px;
+    min-height: 22px;
 }
 
 .page-title {
@@ -84,7 +86,8 @@ code {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     height: 100%;
 }
 

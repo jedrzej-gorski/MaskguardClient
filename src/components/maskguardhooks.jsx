@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 const throttle = (func, time) => {
     let progress = false;
@@ -33,4 +33,3 @@ export function useThrottledWindowSize(time) {
 
     return windowSize;
 }
-

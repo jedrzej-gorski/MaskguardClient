@@ -164,7 +164,7 @@ function App() {
 
           </WrappedWebcam>
             <div className="button-container" style={{minWidth: '220px', height: '8%', marginBottom: '1%'}}>
-              <CaptureButton sx={{marginLeft: "auto", fontSize: "4vh"}} variant="contained" disabled={toastId!=null} onClick={capture}>Capture photo</CaptureButton>
+              <CaptureButton sx={{marginLeft: "auto", fontSize: "min(3vmin, 21px)"}} variant="contained" disabled={toastId!=null} onClick={capture}>Capture photo</CaptureButton>
               <InfoButton isShown={isDrawerShowing} toggleShownUpdate={setDrawerShowing} pathLength={300}></InfoButton>
             </div>
         </>
