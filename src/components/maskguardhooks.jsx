@@ -18,7 +18,6 @@ export function useThrottledWindowSize(time) {
     const [windowSize, updateWindowSize] = useState({width: undefined, height: undefined});
 
     useEffect(() => {
-        console.log("called")
         const resizeHandler = throttle(() => {
             updateWindowSize({width: window.innerWidth, height: window.innerHeight});
         }, time);

@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Toaster, toast } from "react-hot-toast";
 import {Image} from 'image-js';
 import InfoBox from "./components/InfoBox";
+import InfoPager from "./components/InfoPager"
 import Button from "@mui/material/Button";
 
 const AppContainer = styled.div`
@@ -19,6 +20,7 @@ const AppContainer = styled.div`
   align-items: center;
   flex-direction: column;
 `;
+
 
 const CaptureButton = styled(Button)`
   width: 50%;
@@ -33,11 +35,16 @@ function App() {
   const [imgSrc, setImgSrc] = useState(null);
   const [toastId, setToastId] = useState(null) // used to notify user if camera input gets too dark
   const [selectedTab, changeSelectedTab] = useState(null);
+  const [isCaptureEnabled, setIsCaptureEnabled] = useState(false);
   const size = useThrottledWindowSize(300);
-  const ratio = size.width / size.height;
+  const ratio = 9/6 < size.width / size.height? 9/6 : size.width / size.height;
   const webcamRef = useRef(null);
 
-  
+  const handleHelp = (newValue) => {
+    setIsCaptureEnabled(false);
+    setDrawerShowing(newValue)
+  }
+
   const submitImage = async (base64img) => {
     if (!base64img) {
       return;
@@ -129,18 +136,28 @@ function App() {
       const imageSrc = webcamRef.current.getScreenshot();
       const intensity = await getImageIllumination(imageSrc)
       if (intensity < 60) {
+        setIsCaptureEnabled(false)
+        if (isDrawerShowing) {
+          toast.dismiss()
+          setToastId(null)
+          return
+        }
         if (!toastId) {
           const toastid = toast.loading("Your camera input is too dark. Please take the photo in a well-lit place")
           setToastId(toastid)
         }
-      } else{
+
+      } else {
         toast.dismiss()
         setToastId(null)
+        if (!isDrawerShowing) {
+          setIsCaptureEnabled(true)
+        }
       }
-    }, 2000);
+    }, 1000);
 
     return () => clearInterval(callback);
-  }, [toastId]);
+  }, [toastId, isDrawerShowing]);
 
   const clearToken = () => {
     setToken(null);
@@ -160,13 +177,13 @@ function App() {
       <Topbar selectedTab={selectedTab} changeSelectedTab={changeSelectedTab}/>
       {!token && (
         <>
-          <WrappedWebcam ratio={ratio} ref={webcamRef}>
+          <WrappedWebcam ratio={ratio} ref={webcamRef} isShowingHelp={isDrawerShowing}>
 
           </WrappedWebcam>
-            <div className="button-container" style={{minWidth: '220px', height: '8%', marginBottom: '1%'}}>
-              <CaptureButton sx={{marginLeft: "auto", fontSize: "min(3vmin, 21px)"}} variant="contained" disabled={toastId!=null} onClick={capture}>Capture photo</CaptureButton>
-              <InfoButton isShown={isDrawerShowing} toggleShownUpdate={setDrawerShowing} pathLength={300}></InfoButton>
-            </div>
+          <div className="button-container" style={{minWidth: '220px', height: '8%', marginBottom: '1%'}}>
+            <CaptureButton sx={{marginLeft: "auto", fontSize: "min(3vmin, 21px)"}} variant="contained" disabled={!isCaptureEnabled} onClick={capture}>Capture photo</CaptureButton>
+            <InfoButton isShown={isDrawerShowing} toggleShownUpdate={handleHelp} pathLength={300}></InfoButton>
+          </div>
         </>
       )}
         <Modal

@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {ThemeProvider} from '@mui/material/styles';
 import {styled as materialStyled} from '@mui/system';
+import { TfiLayoutPlaceholder } from "react-icons/tfi";
 import styled from 'styled-components'
 import '../index.css';
 
@@ -13,17 +14,8 @@ const StyledBox = styled.div`
         border-radius: 5px;
         position: absolute;
         z-index: -2;
-        right: 2.5%;
+        right: 5px;
         top: 100px;
-        @media (min-width: 1334px) {
-            width: 20%;
-            height: 800px;
-            
-        };
-        @media (max-width: 1334px) {
-            height: 800px;
-            width: 300px;
-        };
         background-color: #FFFFFF;
         transition: opacity 0.6s ease-in-out;
         &:before, &:after {
@@ -54,6 +46,7 @@ const InfoBox = ({ isShown }) => {
 
     return  (
         <StyledBox isShown={isShown}>
+
         </StyledBox>
     );
 };

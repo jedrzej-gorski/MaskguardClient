@@ -44,7 +44,6 @@ const Tab = (props) => {
         }
     });
     if (!isWide && !isShortAndWide) {
-        console.log("isWide")
         return (
             <animated.div style={{...widthTransform}}>
                 <Button onClick={activateAnimation} sx={{padding: '0 0',

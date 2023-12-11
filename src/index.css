@@ -98,8 +98,76 @@ code {
     flex-direction: row;
 }
 
+.webcam-container {
+    @media (min-height: 700px) {
+        height: 80%;
+    }
+    width: fit-content;
+    height: 70%;
+    position: relative;
+}
+
+.help-pager {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5%;
+    overflow: hidden;
+}
+
+.page-text {
+    margin: 5%;
+    text-align: center;
+    font-size: min(4vmin, 25px);
+}
+
+
+.page-dot {
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    margin: 3px;
+    background: #1d67e3;
+}
+
+.selected-page-dot {
+    height: 9px;
+    width: 9px;
+    margin: 6px;
+}
+
+.page-navigation {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: auto;
+}
+
+.dot-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.stacked-container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.page-image {
+    margin-top: 10%
+}
+
 .webcam {
-    height: 60%;
+    height: 100%;
 }
 
 .loading-webcam::before {
