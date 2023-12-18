@@ -3,8 +3,8 @@ import styled from "styled-components"
 import Box from '@mui/material/Box';
 import Tab from "./Tab"
 import { MdHome, MdInfoOutline, MdOutlineLanguage } from "react-icons/md";
-import { IoLanguage } from "react-icons/io5";
-import {useCallback, useEffect, useRef, useState} from "react";
+import IconButton from "@mui/material/IconButton"
+import {useCallback, useState} from "react";
 
 const Bar = styled.div`
     height: min(10vmin, 71px);
@@ -45,7 +45,7 @@ const Topbar = ({selectedTab, changeSelectedTab}) => {
         else {
             tabContainerObserver.disconnect()
         }
-    }, [])
+    }, [tabContainerObserver])
 
     const updateTab = (id) => {
         return () => {changeSelectedTab(id)};
@@ -56,13 +56,15 @@ const Topbar = ({selectedTab, changeSelectedTab}) => {
         <Box component={Bar}>
             <Logo style={{flex: '0 0 auto', color: '#2979FF', height:'100%'}}>MASKGUARD</Logo>
             <div ref={containerRef} className="tab-container">
-                <Tab parentWidth={containerWidth} caption={"Home"} Icon={MdHome} selectedTab={selectedTab} onClick={updateTab(1)} id={1}>
+                <Tab parentWidth={containerWidth} caption={"Home"} Icon={MdHome} selectedTab={selectedTab} onClick={updateTab(0)} id={0}>
                 </Tab>
-                <Tab parentWidth={containerWidth} caption={"About"} Icon={MdInfoOutline} selectedTab={selectedTab} onClick={updateTab(2)} id={2}>
+                <Tab parentWidth={containerWidth} caption={"About"} Icon={MdInfoOutline} selectedTab={selectedTab} onClick={updateTab(1)} id={1}>
                 </Tab>
             </div>
             <div style={{flex: '0 0 auto', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', minWidth: '38px'}}>
-                <MdOutlineLanguage size={'min(7vmin, 55px)'} style={{color: '#5494ff', minWidth: '30px', minHeight: '30px'}}></MdOutlineLanguage>
+                <IconButton>
+                    <MdOutlineLanguage size={'min(7vmin, 55px)'} style={{color: '#5494ff', minWidth: '30px', minHeight: '30px'}}></MdOutlineLanguage>
+                </IconButton>
             </div>
         </Box>
     )

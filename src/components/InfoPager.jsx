@@ -1,11 +1,12 @@
 import '../index.css';
 import Box from '@mui/material/Box';
 import styled from 'styled-components';
-import {useTransition, animated, useSpring} from "react-spring";
+import {useTransition, animated, useSprings} from "react-spring";
 import {useState} from "react";
 import {TfiLayoutPlaceholder} from "react-icons/tfi";
 import helpContent from '../content/help_content.json';
 import { MdOutlineChevronLeft, MdOutlineChevronRight } from "react-icons/md";
+
 import IconButton from "@mui/material/IconButton";
 
 
@@ -49,6 +50,17 @@ const InfoPager = (props) => {
         }
     });
 
+    const [springs, _] = useSprings(helpContent.length, (index) => ({
+        height: currentPage === index ? '11px' : '7px',
+        width: currentPage === index ? '11px' : '7px',
+        marginLeft: currentPage === index ? '10%' : '5%',
+        marginRight: currentPage === index ? '10%' : '5%',
+        config: {
+            mass: 0.5,
+            tension: 180,
+            friction: 21
+        }
+    }), [currentPage])
     const prevPage = () => {
         setCurrentPage(Math.max(currentPage - 1, 0))
     }
@@ -58,7 +70,7 @@ const InfoPager = (props) => {
     }
     const {isShown, ...other} = props
     return <PagerBox isShown={isShown} className="help-pager" >
-        <TfiLayoutPlaceholder size='min(25vh, 50px)' class='page-image'>
+        <TfiLayoutPlaceholder size='30%' class='page-image'>
         </TfiLayoutPlaceholder>
             {transitions((style, item) => {
                 return (
@@ -69,15 +81,16 @@ const InfoPager = (props) => {
             })}
 
         <div className='page-navigation'>
-            <IconButton onClick={prevPage}>
+            <IconButton onClick={prevPage} disabled={!isShown}>
                 <MdOutlineChevronLeft  style={{zIndex: 2}} size={'min(8vmin, 30px)'}></MdOutlineChevronLeft>
             </IconButton>
             <div className='dot-container'>
-                <div className={currentPage === 0 ? 'page-dot selected-page-dot' : 'page-dot'}></div>
-                <div className={currentPage === 1 ? 'page-dot selected-page-dot' : 'page-dot'}></div>
-                <div className={currentPage === 2 ? 'page-dot selected-page-dot' : 'page-dot'}></div>
+                {springs.map((props, key) => {
+                    return <animated.div key={key} className='page-dot' style={props}></animated.div>
+                })
+                }
             </div>
-            <IconButton onClick={nextPage}>
+            <IconButton onClick={nextPage} disabled={!isShown}>
                 <MdOutlineChevronRight style={{zIndex: 2}} size={'min(8vmin, 30px)'}></MdOutlineChevronRight>
             </IconButton>
         </div>

@@ -1,5 +1,5 @@
 import IconButton from '@mui/material/IconButton';
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef, useCallback} from "react";
 import { useSpring, animated, useSpringRef, useChain } from "react-spring";
 import { MdHelp as MdInfo } from "react-icons/md";
 import {styled as materialStyled} from "@mui/system"
@@ -7,11 +7,11 @@ import styled from "styled-components";
 
 
 const StyledIconButton = materialStyled(IconButton)({
+    position: 'absolute',
+    right: 0,
     height: '100%',
-    width: '',
     marginLeft: 'auto',
     backgroundColor: '#FFFFFF',
-    position: 'relative',
     '&:before, &:after': {
         content: '""',
         position: 'absolute',
@@ -42,13 +42,28 @@ const StyledIconButton = materialStyled(IconButton)({
 
 
 const InfoButton = ({ isShown, toggleShownUpdate, pathLength }) => {
+    const [buttonHeight, setButtonHeight] = useState(undefined)
+    const buttonObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+            setButtonHeight(entry.contentRect.height)
+        }
+    })
+    const buttonRef = useCallback(node => {
+        if (node !== null) {
+            setButtonHeight(node.offsetHeight)
+            buttonObserver.observe(node)
+        }
+        else {
+            buttonObserver.disconnect()
+        }
+    }, [buttonObserver])
     const handleToggleDrawer = () => {
       toggleShownUpdate(!isShown);
     };
 
     return  (
-        <StyledIconButton variant="contained" onClick={handleToggleDrawer}>
-            <MdInfo color={'#2979FF'}></MdInfo>
+        <StyledIconButton ref={buttonRef} style={{width: buttonHeight}} variant="contained" onClick={handleToggleDrawer}>
+            <MdInfo size='80%' color={'#2979FF'} style={{position: 'absolute'}}></MdInfo>
         </StyledIconButton>
     );
 

@@ -9,6 +9,7 @@ html, body {
     min-height: fit-content;
     width: 100%;
     overflow-x: hidden;
+    overflow-y: hidden;
     height: 100%
     }
 
@@ -93,18 +94,18 @@ code {
 
 .button-container {
     position: relative;
-    width: 90%;
+    width: 70%;
+    max-height: 50px;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    flex: 0 0 auto;
 }
 
 .webcam-container {
-    @media (min-height: 700px) {
-        height: 80%;
-    }
-    width: fit-content;
-    height: 70%;
+    flex: 0 1 auto;
     position: relative;
+    margin-top: 5px;
 }
 
 .help-pager {
@@ -113,7 +114,6 @@ code {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5%;
     overflow: hidden;
 }
 
@@ -125,17 +125,8 @@ code {
 
 
 .page-dot {
-    height: 6px;
-    width: 6px;
     border-radius: 50%;
-    margin: 3px;
     background: #1d67e3;
-}
-
-.selected-page-dot {
-    height: 9px;
-    width: 9px;
-    margin: 6px;
 }
 
 .page-navigation {
@@ -162,8 +153,13 @@ code {
     z-index: 1;
 }
 
+.layered-container {
+    height: 100%;
+    width: 100%;
+}
+
 .page-image {
-    margin-top: 10%
+    margin-top: 3%;
 }
 
 .webcam {
@@ -173,5 +169,6 @@ code {
 .loading-webcam::before {
     height: 100%;
     width: 100%;
-    background-color: black;
+    background-color: red;
+    z-index: 2;
 }

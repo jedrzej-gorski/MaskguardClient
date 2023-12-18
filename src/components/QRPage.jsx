@@ -1,34 +1,40 @@
 import CountDown, { zeroPad } from "react-countdown";
-import Button from './Button';
+import Button from '@mui/material/Button';
 import styled from 'styled-components';
+import {styled as materialStyled} from "@mui/system"
 import { QRCodeSVG } from "qrcode.react";
 
 const QRWrapper = styled.div`
+  width: 90%;
+  height: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  border: #2979FF 2px solid;
 `;
 
 const StyledQRCode = styled(QRCodeSVG)`
-  padding: 20px;
-  width: 100%;
+  width: 75%;
   max-width: 300px;
   height: auto;
   box-sizing: border-box;
 `;
 
 const Header = styled.h1`
-  font-size: 1.75rem;
+  font-size: min(5vmin, 30px);
   text-align: center;
   font-weight: bold;
 `;
 
 const Counter = styled.div`
-  font-size: 1.5rem;
-  padding-bottom: 12px;
+  font-size: min(4vmin, 25px);
 `;
+
+const StyledButton = materialStyled(Button)({
+    color: '#2979FF',
+    fontSize: 'min(4vmin, 25px)'
+})
 
 const QRPage = ({token, expirationDate, onRenew}) => {
     return (
@@ -44,7 +50,7 @@ const QRPage = ({token, expirationDate, onRenew}) => {
               date={expirationDate * 1000}
             />
           </Counter>
-          <Button onClick={onRenew}>Renew</Button>
+          <StyledButton onClick={onRenew}>Renew</StyledButton>
         </QRWrapper>
     )
 }

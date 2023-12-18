@@ -1,26 +1,12 @@
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 
-const throttle = (func, time) => {
-    let progress = false;
-    return (...args) => {
-        if (progress) {
-            return;
-        }
-        progress = true
-        setTimeout(() => {
-            func(...args);
-            progress = false;
-        }, time)
-    }
-}
-
-export function useThrottledWindowSize(time) {
+export function useWindowSize() {
     const [windowSize, updateWindowSize] = useState({width: undefined, height: undefined});
 
     useEffect(() => {
-        const resizeHandler = throttle(() => {
-            updateWindowSize({width: window.innerWidth, height: window.innerHeight});
-        }, time);
+        const resizeHandler = (() => {
+            updateWindowSize({width: window.innerWidth, height: window.innerHeight})
+        })
 
         resizeHandler()
 
@@ -30,5 +16,5 @@ export function useThrottledWindowSize(time) {
         }
     }, [])
 
-    return windowSize;
+    return windowSize
 }

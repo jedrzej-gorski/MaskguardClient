@@ -4,14 +4,12 @@ import styled from "styled-components";
 import Modal from "./components/Modal";
 import QRPage from "./components/QRPage";
 import Topbar from "./components/Topbar";
-import { useThrottledWindowSize } from "./components/maskguardhooks"
+import AboutPage from "./components/AboutPage"
 import InfoButton from "./components/InfoButton";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Toaster, toast } from "react-hot-toast";
 import {Image} from 'image-js';
-import InfoBox from "./components/InfoBox";
-import InfoPager from "./components/InfoPager"
 import Button from "@mui/material/Button";
+import {useTransition} from "react-spring";
 
 const AppContainer = styled.div`
   height: 100%;
@@ -21,9 +19,30 @@ const AppContainer = styled.div`
   flex-direction: column;
 `;
 
+const UIContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-height: calc(100% - max(48px, min(10vmin, 71px)));
+  flex: 1 0 auto;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+`
+
+const MainContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1%;
+  align-items: center;
+  flex-direction: column;
+  transition: opacity .5s ease-in-out;
+  opacity: ${props => props.selectedTab === 0? '1' : '0'}
+`
 
 const CaptureButton = styled(Button)`
-  width: 50%;
+  width: 60%;
   height: 100%;
 `;
 
@@ -33,11 +52,10 @@ function App() {
   const [token, setToken] = useState(null);
   const [expirationDate, setExpirationDate] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false)
   const [toastId, setToastId] = useState(null) // used to notify user if camera input gets too dark
-  const [selectedTab, changeSelectedTab] = useState(null);
+  const [selectedTab, changeSelectedTab] = useState(0);
   const [isCaptureEnabled, setIsCaptureEnabled] = useState(false);
-  const size = useThrottledWindowSize(300);
-  const ratio = 9/6 < size.width / size.height? 9/6 : size.width / size.height;
   const webcamRef = useRef(null);
 
   const handleHelp = (newValue) => {
@@ -54,7 +72,7 @@ function App() {
     });
     var response = undefined
     try {
-      response = await fetch("https://api.mask-guard.net/predict/", {
+      response = await fetch("http://localhost:8000", {
         method: "post",
         body: payload,
         headers: {
@@ -72,7 +90,6 @@ function App() {
       localStorage.setItem("expirationDate", json.expirationDate);
       setToken(json.token);
       setExpirationDate(json.expirationDate);
-      setImgSrc(null);
     } else {
       switch (json["predicted-class"]) {
         case "no_mask":
@@ -88,13 +105,12 @@ function App() {
         default:
           toast.error("Please capture your face inside the picture");
       }
-      setImgSrc(null);
     }
   };
 
   const getImageIllumination = async (imageSrc) => {
     if (imageSrc == null) {
-      return 255
+      return 0
     }
     const image = await Image.load(imageSrc)
     const {data, width, height} = image
@@ -133,11 +149,11 @@ function App() {
 
   useEffect(() => {
     const callback = setInterval(async () => {
-      const imageSrc = webcamRef.current.getScreenshot();
+      const imageSrc = webcamRef.current?.getScreenshot();
       const intensity = await getImageIllumination(imageSrc)
       if (intensity < 60) {
         setIsCaptureEnabled(false)
-        if (isDrawerShowing) {
+        if (isDrawerShowing || token) {
           toast.dismiss()
           setToastId(null)
           return
@@ -150,15 +166,14 @@ function App() {
       } else {
         toast.dismiss()
         setToastId(null)
-        if (!isDrawerShowing) {
+        if (!isDrawerShowing && !token) {
           setIsCaptureEnabled(true)
         }
       }
     }, 1000);
 
     return () => clearInterval(callback);
-  }, [toastId, isDrawerShowing]);
-
+  }, [toastId, isDrawerShowing, token]);
   const clearToken = () => {
     setToken(null);
     setExpirationDate(null);
@@ -168,33 +183,40 @@ function App() {
   const capture = useCallback(async () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImgSrc(imageSrc);
-
+    setIsPreviewVisible(true);
   }, [webcamRef, setImgSrc]);
+
 
   return (
     <AppContainer>
       <Toaster containerStyle={{top: 85}}/>
       <Topbar selectedTab={selectedTab} changeSelectedTab={changeSelectedTab}/>
-      {!token && (
-        <>
-          <WrappedWebcam ratio={ratio} ref={webcamRef} isShowingHelp={isDrawerShowing}>
+      <UIContainer>
+        <MainContainer selectedTab={selectedTab}>
+          {!token && (
+              <>
+                <WrappedWebcam ref={webcamRef} isShowingHelp={isDrawerShowing}>
+                </WrappedWebcam>
+                <div className="button-container" style={{minWidth: '220px', height: '8%', marginBottom: '1%'}}>
+                  <CaptureButton sx={{fontSize: "min(3vmin, 21px)"}} variant="contained" disabled={!isCaptureEnabled} onClick={capture}>Capture photo</CaptureButton>
+                  <InfoButton isShown={isDrawerShowing} toggleShownUpdate={handleHelp} pathLength={300}></InfoButton>
+                </div>
+              </>
+          )}
+          {token && (
+              <QRPage token={token} expirationDate={expirationDate} onRenew={clearToken} />
+          )}
+        </MainContainer>
+        <AboutPage selectedTab={selectedTab}>
 
-          </WrappedWebcam>
-          <div className="button-container" style={{minWidth: '220px', height: '8%', marginBottom: '1%'}}>
-            <CaptureButton sx={{marginLeft: "auto", fontSize: "min(3vmin, 21px)"}} variant="contained" disabled={!isCaptureEnabled} onClick={capture}>Capture photo</CaptureButton>
-            <InfoButton isShown={isDrawerShowing} toggleShownUpdate={handleHelp} pathLength={300}></InfoButton>
-          </div>
-        </>
-      )}
-        <Modal
-          isOpen={imgSrc && !token}
-          onClose={() => setImgSrc(null)}
-          onConfirm={() => submitImage(imgSrc)}
-          imgSrc={imgSrc}
-        />
-      {token && (
-        <QRPage token={token} expirationDate={expirationDate} onRenew={clearToken} />
-      )}
+        </AboutPage>
+      </UIContainer>
+      <Modal
+          isOpen={isPreviewVisible && !token}
+          imageClearer={() => setImgSrc(null)}
+          onClose={() => {setIsPreviewVisible(false)}}
+          onConfirm={() => {submitImage(imgSrc).then(setIsPreviewVisible)}}
+          imgSrc={imgSrc}/>
     </AppContainer>
   );
 }
