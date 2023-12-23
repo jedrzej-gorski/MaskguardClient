@@ -112,6 +112,7 @@ code {
     height: 100%;
     width: 100%;
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     overflow: hidden;
@@ -123,6 +124,16 @@ code {
     font-size: min(4vmin, 25px);
 }
 
+.lang-text {
+    @supports (background-clip:text) or (-webkit-background-clip:text) {
+        color: transparent;
+        background-size: cover;
+        background-clip: text;
+        -webkit-background-clip: text;
+        background-image: url(./content/pl.svg)
+
+    }
+}
 
 .page-dot {
     border-radius: 50%;
@@ -150,7 +161,6 @@ code {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1;
 }
 
 .layered-container {
@@ -164,6 +174,13 @@ code {
 
 .webcam {
     height: 100%;
+    width: 100%
+}
+
+.photo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .loading-webcam::before {

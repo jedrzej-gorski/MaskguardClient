@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import {styled as materialStyled} from "@mui/system"
 import { QRCodeSVG } from "qrcode.react";
+import { useTranslation } from 'react-i18next';
 
 const QRWrapper = styled.div`
   width: 90%;
@@ -37,12 +38,13 @@ const StyledButton = materialStyled(Button)({
 })
 
 const QRPage = ({token, expirationDate, onRenew}) => {
+    const {t, i18n} = useTranslation()
     return (
         <QRWrapper>
-          <Header>Your access code is ready</Header>
+          <Header>{t('QR Header')}</Header>
           <StyledQRCode value={token} bgColor="#00000000" />
           <Counter>
-            {"The token will expire in "}
+            {t('QR Content')}
             <CountDown
               renderer={({ minutes, seconds }) =>
                 `${minutes}:${zeroPad(seconds)}`
@@ -50,7 +52,7 @@ const QRPage = ({token, expirationDate, onRenew}) => {
               date={expirationDate * 1000}
             />
           </Counter>
-          <StyledButton onClick={onRenew}>Renew</StyledButton>
+          <StyledButton onClick={onRenew}>{t('Renew')}</StyledButton>
         </QRWrapper>
     )
 }

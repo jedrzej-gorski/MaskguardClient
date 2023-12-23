@@ -3,11 +3,11 @@ import Box from '@mui/material/Box';
 import styled from 'styled-components';
 import {useTransition, animated, useSprings} from "react-spring";
 import {useState} from "react";
-import {TfiLayoutPlaceholder} from "react-icons/tfi";
-import helpContent from '../content/help_content.json';
+import {ReactComponent as ReactIllustration} from '../content/Illustrations1.svg'
 import { MdOutlineChevronLeft, MdOutlineChevronRight } from "react-icons/md";
-
 import IconButton from "@mui/material/IconButton";
+import {useTranslation} from "react-i18next";
+import constants from "../content/constants.json"
 
 
 const PagerBox = styled(Box)`
@@ -37,6 +37,7 @@ const PagerBox = styled(Box)`
   };
 `
 const InfoPager = (props) => {
+    const {t, i18n} = useTranslation()
     const [currentPage, setCurrentPage] = useState(0)
     const transitions = useTransition(currentPage, {
         exitBeforeEnter: true,
@@ -50,7 +51,7 @@ const InfoPager = (props) => {
         }
     });
 
-    const [springs, _] = useSprings(helpContent.length, (index) => ({
+    const [springs, _] = useSprings(constants["helpPages"], (index) => ({
         height: currentPage === index ? '11px' : '7px',
         width: currentPage === index ? '11px' : '7px',
         marginLeft: currentPage === index ? '10%' : '5%',
@@ -65,17 +66,19 @@ const InfoPager = (props) => {
         setCurrentPage(Math.max(currentPage - 1, 0))
     }
 
+
+
     const nextPage = () => {
-        setCurrentPage(Math.min(currentPage + 1, helpContent.length - 1))
+        setCurrentPage(Math.min(currentPage + 1, constants["helpPages"] - 1))
     }
     const {isShown, ...other} = props
     return <PagerBox isShown={isShown} className="help-pager" >
-        <TfiLayoutPlaceholder size='30%' class='page-image'>
-        </TfiLayoutPlaceholder>
+        <ReactIllustration size='30%' class='page-image'>
+        </ReactIllustration>
             {transitions((style, item) => {
                 return (
                     <animated.div style={{...style}}>
-                        <p className='page-text'>{helpContent[item].content}</p>
+                        <p className='page-text'>{t(`Help ${item}`)}</p>
                     </animated.div>
                 )
             })}

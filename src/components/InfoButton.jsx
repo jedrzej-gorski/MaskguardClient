@@ -1,10 +1,8 @@
 import IconButton from '@mui/material/IconButton';
-import {useState, useEffect, useRef, useCallback} from "react";
-import { useSpring, animated, useSpringRef, useChain } from "react-spring";
+import {useState, useCallback} from "react";
 import { MdHelp as MdInfo } from "react-icons/md";
 import {styled as materialStyled} from "@mui/system"
-import styled from "styled-components";
-
+import {useDeviceDetection} from "./maskguardhooks";
 
 const StyledIconButton = materialStyled(IconButton)({
     position: 'absolute',
@@ -41,8 +39,9 @@ const StyledIconButton = materialStyled(IconButton)({
 });
 
 
-const InfoButton = ({ isShown, toggleShownUpdate, pathLength }) => {
+const InfoButton = ({ isShown, toggleShownUpdate }) => {
     const [buttonHeight, setButtonHeight] = useState(undefined)
+    const device = useDeviceDetection()
     const buttonObserver = new ResizeObserver((entries) => {
         for (let entry of entries) {
             setButtonHeight(entry.contentRect.height)
@@ -60,9 +59,13 @@ const InfoButton = ({ isShown, toggleShownUpdate, pathLength }) => {
     const handleToggleDrawer = () => {
       toggleShownUpdate(!isShown);
     };
+    let mobileStyle = {}
+    if (device === "Mobile" || device === "Tablet") {
+        mobileStyle = {position: 'relative', marginLeft: 'initial'}
+    }
 
     return  (
-        <StyledIconButton ref={buttonRef} style={{width: buttonHeight}} variant="contained" onClick={handleToggleDrawer}>
+        <StyledIconButton sx={mobileStyle} ref={buttonRef} style={{width: buttonHeight}} variant="contained" onClick={handleToggleDrawer}>
             <MdInfo size='80%' color={'#2979FF'} style={{position: 'absolute'}}></MdInfo>
         </StyledIconButton>
     );

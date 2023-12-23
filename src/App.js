@@ -4,12 +4,16 @@ import styled from "styled-components";
 import Modal from "./components/Modal";
 import QRPage from "./components/QRPage";
 import Topbar from "./components/Topbar";
+import InfoContainer from "./components/InfoContainer";
 import AboutPage from "./components/AboutPage"
 import InfoButton from "./components/InfoButton";
-import { Toaster, toast } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import {Image} from 'image-js';
 import Button from "@mui/material/Button";
-import {useTransition} from "react-spring";
+import {useMediaQuery} from "react-responsive";
+import { useDeviceDetection} from "./components/maskguardhooks";
+import MobileInput from "./components/MobileInput";
+import {useTranslation} from "react-i18next";
 
 const AppContainer = styled.div`
   height: 100%;
@@ -30,13 +34,27 @@ const UIContainer = styled.div`
   flex-direction: column;
 `
 
-const MainContainer = styled.div`
-  width: 100%;
+const WebcamSectionContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   gap: 1%;
   align-items: center;
   flex-direction: column;
+`
+
+const MainContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  @media (max-aspect-ratio: 21/10) {
+    flex-direction: column;
+    height: 100%;
+  }
+  @media (min-aspect-ratio: 21/10) {
+    flex-direction: row;
+    width: 100%;
+  }
+  gap: 1%;
+  align-items: center;
   transition: opacity .5s ease-in-out;
   opacity: ${props => props.selectedTab === 0? '1' : '0'}
 `
@@ -48,20 +66,16 @@ const CaptureButton = styled(Button)`
 
 
 function App() {
+  const {t, i18n} = useTranslation()
   const [isDrawerShowing, setDrawerShowing] = useState(null);
   const [token, setToken] = useState(null);
   const [expirationDate, setExpirationDate] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false)
-  const [toastId, setToastId] = useState(null) // used to notify user if camera input gets too dark
   const [selectedTab, changeSelectedTab] = useState(0);
-  const [isCaptureEnabled, setIsCaptureEnabled] = useState(false);
   const webcamRef = useRef(null);
-
-  const handleHelp = (newValue) => {
-    setIsCaptureEnabled(false);
-    setDrawerShowing(newValue)
-  }
+  const isEven = useMediaQuery({query: '(max-aspect-ratio: 21/10) and (min-aspect-ratio: 10/21)'})
+  const deviceType = useDeviceDetection()
 
   const submitImage = async (base64img) => {
     if (!base64img) {
@@ -146,14 +160,14 @@ function App() {
 
     return () => clearInterval(callback);
   }, [expirationDate, setExpirationDate, setToken]);
-
+  /*
   useEffect(() => {
     const callback = setInterval(async () => {
       const imageSrc = webcamRef.current?.getScreenshot();
       const intensity = await getImageIllumination(imageSrc)
       if (intensity < 60) {
         setIsCaptureEnabled(false)
-        if (isDrawerShowing || token) {
+        if (isDrawerShowing || token || selectedTab !== 0) {
           toast.dismiss()
           setToastId(null)
           return
@@ -170,10 +184,10 @@ function App() {
           setIsCaptureEnabled(true)
         }
       }
-    }, 1000);
+    }, 500);
 
     return () => clearInterval(callback);
-  }, [toastId, isDrawerShowing, token]);
+  }, [toastId, isDrawerShowing, token, selectedTab]);*/
   const clearToken = () => {
     setToken(null);
     setExpirationDate(null);
@@ -187,35 +201,54 @@ function App() {
   }, [webcamRef, setImgSrc]);
 
 
+
   return (
     <AppContainer>
       <Toaster containerStyle={{top: 85}}/>
       <Topbar selectedTab={selectedTab} changeSelectedTab={changeSelectedTab}/>
-      <UIContainer>
+      <UIContainer >
         <MainContainer selectedTab={selectedTab}>
-          {!token && (
-              <>
-                <WrappedWebcam ref={webcamRef} isShowingHelp={isDrawerShowing}>
-                </WrappedWebcam>
-                <div className="button-container" style={{minWidth: '220px', height: '8%', marginBottom: '1%'}}>
-                  <CaptureButton sx={{fontSize: "min(3vmin, 21px)"}} variant="contained" disabled={!isCaptureEnabled} onClick={capture}>Capture photo</CaptureButton>
-                  <InfoButton isShown={isDrawerShowing} toggleShownUpdate={handleHelp} pathLength={300}></InfoButton>
-                </div>
-              </>
-          )}
-          {token && (
-              <QRPage token={token} expirationDate={expirationDate} onRenew={clearToken} />
-          )}
+          <WebcamSectionContainer>
+            {!token && deviceType === "Desktop" && (
+                <>
+                  <WrappedWebcam ref={webcamRef} isShowingHelp={isDrawerShowing}>
+                  </WrappedWebcam>
+                  <div className="button-container" style={{minWidth: '220px', height: '8%', marginBottom: '1%'}}>
+                    <CaptureButton sx={{fontSize: "min(3vmin, 21px)"}} variant="contained" onClick={capture}>{t("Capture Photo")}</CaptureButton>
+                    {isEven &&
+                        <InfoButton isShown={isDrawerShowing} toggleShownUpdate={setDrawerShowing} pathLength={300}></InfoButton>
+                    }
+
+                  </div>
+                </>
+            )}
+            {!token && (deviceType === "Mobile" || deviceType === "Tablet") &&
+                <>
+                  <MobileInput ref={webcamRef} isShowingHelp={isDrawerShowing} capture={capture}>
+                  </MobileInput>
+                  <div className="button-container" style={{minWidth: '220px', height: '13%', maxHeight: '75px'}}>
+                    {isEven &&
+                        <InfoButton isShown={isDrawerShowing} toggleShownUpdate={setDrawerShowing} pathLength={300}></InfoButton>
+                    }
+                  </div>
+                </>
+            }
+            {token && (
+                <QRPage token={token} expirationDate={expirationDate} onRenew={clearToken} />
+            )}
+          </WebcamSectionContainer>
+          {!isEven &&
+              <InfoContainer></InfoContainer>
+          }
         </MainContainer>
         <AboutPage selectedTab={selectedTab}>
-
         </AboutPage>
       </UIContainer>
       <Modal
           isOpen={isPreviewVisible && !token}
           imageClearer={() => setImgSrc(null)}
           onClose={() => {setIsPreviewVisible(false)}}
-          onConfirm={() => {submitImage(imgSrc).then(setIsPreviewVisible)}}
+          onConfirm={() => {submitImage(imgSrc).then(setIsPreviewVisible(false))}}
           imgSrc={imgSrc}/>
     </AppContainer>
   );

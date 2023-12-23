@@ -1,9 +1,7 @@
 import IconButton from '@mui/material/IconButton';
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import { useSpring, animated, useSpringRef, useChain } from "react-spring";
-import { MdInfo } from "react-icons/md";
-import  InfoClose from "./info-close";
-import { IoMdCloseCircle } from "react-icons/io";
+import InfoClose from "./info-close";
 import styled from "styled-components";
 
 const StyledIconButton = styled(animated.div)`

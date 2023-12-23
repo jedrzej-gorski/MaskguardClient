@@ -3,8 +3,9 @@ import styled from "styled-components"
 import Box from '@mui/material/Box';
 import Tab from "./Tab"
 import { MdHome, MdInfoOutline, MdOutlineLanguage } from "react-icons/md";
-import IconButton from "@mui/material/IconButton"
-import {useCallback, useState} from "react";
+import Button from "@mui/material/Button"
+import {useCallback, useEffect, useState} from "react";
+import constants from "../content/constants.json"
 
 const Bar = styled.div`
     height: min(10vmin, 71px);
@@ -31,6 +32,7 @@ const Logo = styled.span`
 `
 
 const Topbar = ({selectedTab, changeSelectedTab}) => {
+    const [language, setLanguage] = useState(0)
     const [containerWidth, setContainerWidth] = useState(null)
     const tabContainerObserver = new ResizeObserver((entries) => {
         for (let entry of entries) {
@@ -47,24 +49,21 @@ const Topbar = ({selectedTab, changeSelectedTab}) => {
         }
     }, [tabContainerObserver])
 
+    const changeLanguage = () => {
+        setLanguage((language + 1) % constants["nLanguages"])
+    }
     const updateTab = (id) => {
         return () => {changeSelectedTab(id)};
     }
-
 
     return (
         <Box component={Bar}>
             <Logo style={{flex: '0 0 auto', color: '#2979FF', height:'100%'}}>MASKGUARD</Logo>
             <div ref={containerRef} className="tab-container">
-                <Tab parentWidth={containerWidth} caption={"Home"} Icon={MdHome} selectedTab={selectedTab} onClick={updateTab(0)} id={0}>
+                <Tab parentWidth={containerWidth} caption={'Home'} Icon={MdHome} selectedTab={selectedTab} onClick={updateTab(0)} id={0}>
                 </Tab>
-                <Tab parentWidth={containerWidth} caption={"About"} Icon={MdInfoOutline} selectedTab={selectedTab} onClick={updateTab(1)} id={1}>
+                <Tab parentWidth={containerWidth} caption={'About'} Icon={MdInfoOutline} selectedTab={selectedTab} onClick={updateTab(1)} id={1}>
                 </Tab>
-            </div>
-            <div style={{flex: '0 0 auto', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', minWidth: '38px'}}>
-                <IconButton>
-                    <MdOutlineLanguage size={'min(7vmin, 55px)'} style={{color: '#5494ff', minWidth: '30px', minHeight: '30px'}}></MdOutlineLanguage>
-                </IconButton>
             </div>
         </Box>
     )

@@ -4,9 +4,18 @@ import {useSpring, animated, useSpringRef, useChain} from "react-spring";
 import {useState} from "react";
 import Typewriter from "./Typewriter";
 import {useMediaQuery} from "react-responsive";
+import styled from "styled-components";
+import {useTranslation} from "react-i18next";
 
+
+const ShakeContainer = styled(animated.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`
 
 const Tab = (props) => {
+    const {t, i18n} = useTranslation()
     const {caption, Icon, selectedTab, onClick, id, parentWidth, ...other} = props;
     const [animationPhase, setAnimationPhase] = useState(0);
     const stages = ['rotate(0deg)', 'rotate(-10deg)', 'rotate(10deg)']
@@ -51,12 +60,12 @@ const Tab = (props) => {
                     width: '100%',
                     height: '100%',
                     lineHeight: 'normal'}} >
-                    <animated.div style={{display: 'flex', flexDirection:'column', alignItems: 'flex-end', ...shakeTransform}}>
+                    <ShakeContainer style={{...shakeTransform}}>
                         <Icon {...other} className={`${activationClass} tab-icon` }/>
-                    </animated.div>
+                    </ShakeContainer>
                     {selectedTab === id
                         ? <Typography sx={{fontSize: 'max(min(7vmin, 45px), 22px)', lineHeight: 'normal', fontFamily: 'Metropolis', fontWeight: 'normal'}} {...other} className={`${activationClass}`}>
-                            <Typewriter text={caption} delay={50}></Typewriter>
+                            <Typewriter text={t(caption)} delay={50}></Typewriter>
                         </Typography>
                         : null}
                 </Button>
@@ -70,11 +79,11 @@ const Tab = (props) => {
                 width: '100%',
                 height: '100%',
                 lineHeight: 'normal'}} >
-                <animated.div style={{display: 'flex', flexDirection:'column', alignItems: 'flex-end', ...shakeTransform}}>
+                <ShakeContainer style={{...shakeTransform}}>
                     <Icon {...other} className={`${activationClass} tab-icon` }/>
-                </animated.div>
+                </ShakeContainer>
                 <Typography sx={{fontSize: 'max(min(7vmin, 45px), 22px)', lineHeight: 'normal', fontFamily: 'Metropolis', fontWeight: 'normal'}} {...other} className={`${activationClass}`}>
-                        {caption}
+                        {t(caption)}
                 </Typography>
             </Button>
         )

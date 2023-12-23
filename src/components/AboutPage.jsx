@@ -2,7 +2,9 @@ import styled from "styled-components";
 import {useTransition, animated} from "react-spring";
 import {useEffect, useState} from "react";
 import Box from "@mui/material/Box";
+import { useTranslation } from 'react-i18next';
 import Typography from "@mui/material/Typography";
+import constants from "../content/constants.json"
 
 const FlexContainer = styled.div`
     display: flex;
@@ -59,6 +61,7 @@ const ContentBox = styled(Box)`
 
 const AboutPage = ({selectedTab}) => {
     const [isStartingAnimation, setIsStartingAnimation] = useState(false)
+    const {t, i18n} = useTranslation()
     const transition = useTransition(selectedTab === 1, {
         from: {opacity: 0},
         enter: {opacity: 1},
@@ -78,6 +81,11 @@ const AboutPage = ({selectedTab}) => {
         }
     }, [selectedTab])
 
+    const rows = []
+    for (let i = 0; i < constants["authors"].length; i++) {
+        rows.push((<p>{constants["authors"][i]}</p>))
+    }
+
     return (
         <>
             {transition((style, item) => {
@@ -86,11 +94,9 @@ const AboutPage = ({selectedTab}) => {
                         <animated.div className='stacked-container' style={style}>
                             <FlexContainer>
                                 <ContentBox isStartingAnimation={isStartingAnimation}>
-                                    <Logo style={{flex: '0 0 auto', color: '#2979FF', height:'25%'}}>MASKGUARD</Logo>
-                                    <Typography>Authors:</Typography>
-                                    <p>Jakub Gołąb</p>
-                                    <p>Jędrzej Górski</p>
-                                    <p>Jan Majchrzak</p>
+                                    <Logo style={{flex: '0 0 auto', color: '#2979FF', height:'25%', fontHeight: '0'}}>MASKGUARD</Logo>
+                                    <Typography sx={{fontSize: 'min(6vmin, 20px)', margin: '5px', fontHeight: '0'}}>{t("Authors Header")}</Typography>
+                                    {rows}
                                 </ContentBox>
                             </FlexContainer>
                         </animated.div>

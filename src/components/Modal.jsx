@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import {animated, useSpring, useTransition} from 'react-spring'
 import { ThemeProvider } from '@mui/material/styles';
 import muiTheme from '../theme.js';
-import {useEffect} from "react";
+import {useTranslation} from "react-i18next";
 
 const PopUp = styled(animated.div)`
   z-index: 10;
@@ -79,6 +79,7 @@ const Modal = ({ imageClearer, isOpen, onClose, onConfirm, imgSrc }) => {
             }
         }
     })
+    const {t, i18n} = useTranslation()
   return(
       <>
         {transition((style, item) => {
@@ -90,8 +91,8 @@ const Modal = ({ imageClearer, isOpen, onClose, onConfirm, imgSrc }) => {
                             <CapturedImage src={imgSrc} alt="captured camera input" />
                             <ButtonWrapper>
                                 <ThemeProvider theme={muiTheme}>
-                                    <Button variant="contained" sx={{bgcolor: 'primary.main', margin: '5px'}} onClick={onClose}>Discard</Button>
-                                    <Button variant="contained" sx={{bgcolor: 'primary.main', margin: '5px'}} onClick={onConfirm}>Send</Button>
+                                    <Button variant="contained" sx={{bgcolor: 'primary.main', margin: '5px'}} onClick={onClose}>{t('Discard')}</Button>
+                                    <Button variant="contained" sx={{bgcolor: 'primary.main', margin: '5px'}} onClick={onConfirm}>{t('Send')}</Button>
                                 </ThemeProvider>
                             </ButtonWrapper>
                         </PopUp>

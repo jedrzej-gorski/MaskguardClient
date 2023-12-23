@@ -6,7 +6,6 @@ const StyledButton = styled.button`
   border-radius: 7px;
   color: #122c34;
   font-size: 1.5rem;
-  color: #FFFFFF;
   border: none;
   min-width: 100px;
   transition: all 0.2s;
