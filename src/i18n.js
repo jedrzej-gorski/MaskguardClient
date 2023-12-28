@@ -4,7 +4,7 @@ import resources from "./content/resources.json"
 import LanguageDetector from 'i18next-browser-languagedetector'
 
 const options = {
-    order: ['navigator'],
+    order: ['querystring', 'navigator'],
 
     // cache user language
     caches: ['localStorage'],
