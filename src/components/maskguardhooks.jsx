@@ -1,0 +1,49 @@
+import {useEffect, useState} from "react";
+
+export function useWindowSize() {
+    const [windowSize, updateWindowSize] = useState({width: undefined, height: undefined});
+
+    useEffect(() => {
+        const resizeHandler = (() => {
+            updateWindowSize({width: window.innerWidth, height: window.innerHeight})
+        })
+
+        resizeHandler()
+
+        window.addEventListener("resize", resizeHandler)
+        return () => {
+            window.removeEventListener("resize", resizeHandler)
+        }
+    }, [])
+
+    return windowSize
+}
+
+export function useDeviceDetection() {
+    const [device, setDevice] = useState('');
+
+    useEffect(() => {
+        const handleDeviceDetection = () => {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isMobile = /iphone|ipad|ipod|android|blackberry|windows phone/g.test(userAgent);
+            const isTablet = /(ipad|tablet|playbook|silk)|(android(?!.*mobile))/g.test(userAgent);
+
+            if (isMobile) {
+                setDevice('Mobile');
+            } else if (isTablet) {
+                setDevice('Tablet');
+            } else {
+                setDevice('Desktop');
+            }
+        };
+
+        handleDeviceDetection();
+        window.addEventListener('resize', handleDeviceDetection);
+
+        return () => {
+            window.removeEventListener('resize', handleDeviceDetection);
+        };
+    }, []);
+
+    return device;
+};

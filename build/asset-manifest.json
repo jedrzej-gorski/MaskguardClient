@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.52a0964e.css",
+    "main.js": "/static/js/main.2356d563.js",
+    "static/media/Bavro-Regular.ttf": "/static/media/Bavro-Regular.a5c188fd24166095f144.ttf",
+    "static/media/Metropolis-Bold.otf": "/static/media/Metropolis-Bold.c5e04fafcff6fc79cd76.otf",
+    "static/media/Metropolis-Regular.woff": "/static/media/Metropolis-Regular.3f9f4365eb1cfd1ba856.woff",
+    "static/media/Bavro-Regular.woff": "/static/media/Bavro-Regular.34b54a76422ad3484483.woff",
+    "index.html": "/index.html",
+    "main.52a0964e.css.map": "/static/css/main.52a0964e.css.map",
+    "main.2356d563.js.map": "/static/js/main.2356d563.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.52a0964e.css",
+    "static/js/main.2356d563.js"
+  ]
+}

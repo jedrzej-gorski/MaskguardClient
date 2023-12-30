@@ -1,0 +1,38 @@
+{
+  "en": {
+    "translation": {
+      "Home": "HOME",
+      "About": "ABOUT",
+      "Help 0": "Make sure that your face is well-lit and that you are facing the camera directly.",
+      "Help 1": "If you are denied clearance, make sure you are wearing your mask properly; your chin, nose and mouth should all be completely covered.",
+      "Help 2": "The QR code you receive upon successful verification will last 15 minutes. After that, you must take another photo to reacquire clearance.",
+      "Authors Header": "Authors:",
+      "Supervisor Header": "Supervisor:",
+      "Capture Photo": "Capture Photo",
+      "Upload Photo": "UPLOAD PHOTO",
+      "Send": "Send",
+      "Discard": "Discard",
+      "QR Header": "Your QR code is ready!",
+      "QR Content": "The token will expire in ",
+      "Renew": "Renew"
+    }
+  },
+  "pl": {
+    "translation": {
+      "Home": "START",
+      "About": "INFO",
+      "Help 0": "Upewnij się, że twoja twarz jest dobrze oświetlona i ustawiona przodem do kamery.",
+      "Help 1": "Twoja maska musi być poprawnie założona; powinna całkowicie zakrywać twoją brodę, nos oraz usta.",
+      "Help 2": "Kod QR otrzymany po pomyślnej weryfikacji będzie ważny 15 minut. Po upływie tego czasu, musisz dokonać weryfikacji ponownie.",
+      "Authors Header": "Autorzy:",
+      "Supervisor Header": "Promotor:",
+      "Capture Photo": "Zrób zdjęcie",
+      "Upload Photo": "ZRÓB ZDJĘCIE",
+      "Send": "Wyślij",
+      "Discard": "Cofnij",
+      "QR Header": "Twój kod QR został pomyślnie wygenerowany!",
+      "QR Content": "Twój token wygaśnie za ",
+      "Renew": "Odnów"
+    }
+  }
+}

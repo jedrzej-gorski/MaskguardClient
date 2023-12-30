@@ -1,3 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100%;
+    min-height: fit-content;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100%
+    }
+
+#root {
+    height: 100%;
+}
+
+@font-face {
+    font-family: "Bavro";
+    src: local("Bavro"),
+    url("./fonts/Bavro/Bavro-Regular.woff") format("woff");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "Metropolis";
+    src: local("Metropolis"),
+    url("fonts/Metropolis/Metropolis-Regular.woff") format("woff");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Metropolis";
+    src: local("Metropolis"),
+    url("fonts/Metropolis/Metropolis-Bold.otf") format("opentype");
+    font-weight: bold;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +50,142 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.not-selected-tab {
+    color: grey;
+}
+
+.selected-tab {
+    color: #2979FF;
+}
+
+.tab {
+
+}
+
+
+.tab-icon {
+    font-size: min(8vmin, 51px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-width: 22px;
+    min-height: 22px;
+}
+
+.page-title {
+    width: fit-content;
+}
+
+.tab-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+}
+
+.button-container {
+    position: relative;
+    width: 70%;
+    max-height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+
+.webcam-container {
+    flex: 0 1 auto;
+    position: relative;
+    margin-top: 5px;
+}
+
+.help-pager {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.page-text {
+    margin: 5%;
+    text-align: center;
+    font-size: min(4vmin, 25px);
+}
+
+.lang-text {
+    @supports (background-clip:text) or (-webkit-background-clip:text) {
+        color: transparent;
+        background-size: cover;
+        background-clip: text;
+        -webkit-background-clip: text;
+        background-image: url(./content/pl.svg)
+
+    }
+}
+
+.page-dot {
+    border-radius: 50%;
+    background: #1d67e3;
+}
+
+.page-navigation {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: auto;
+}
+
+.dot-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.stacked-container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.layered-container {
+    height: 100%;
+    width: 100%;
+}
+
+.page-image {
+    margin-top: 3%;
+}
+
+.webcam {
+    height: 100%;
+    width: 100%
+}
+
+.photo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loading-webcam::before {
+    height: 100%;
+    width: 100%;
+    background-color: red;
+    z-index: 2;
 }
