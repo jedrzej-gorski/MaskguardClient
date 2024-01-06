@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import styled from "styled-components";
+import React from "react";
+import PropTypes from "prop-types";
 
 const StyledButton = styled.button`
   padding: 10px;
@@ -20,10 +22,14 @@ const StyledButton = styled.button`
     color: gray;
     border-color: gray;
   }
-  `
+`;
 
-const Button = ({ children, ...props }) => {
-    return <StyledButton {...props}>{children}</StyledButton>
-  }
+function Button({ children, ...props }) {
+  return <StyledButton {...props}>{children}</StyledButton>;
+}
+
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default Button;
