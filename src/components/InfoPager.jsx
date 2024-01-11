@@ -7,7 +7,9 @@ import { MdOutlineChevronLeft, MdOutlineChevronRight } from "react-icons/md";
 import IconButton from "@mui/material/IconButton";
 import { useTranslation } from "react-i18next";
 import { PropTypes } from "prop-types";
-import { ReactComponent as ReactIllustration } from "../content/Illustrations1.svg";
+import { ReactComponent as Illustration1 } from "../content/Illustration1.svg";
+import { ReactComponent as Illustration2 } from "../content/Illustration2.svg";
+import { ReactComponent as Illustration3 } from "../content/Illustration3.svg";
 import constants from "../content/constants.json";
 
 const PagerBox = styled(Box)`
@@ -37,9 +39,23 @@ const PagerBox = styled(Box)`
     border-bottom: 2px solid rgb(41, 121, 255);
   }
 `;
+
+const IllustrationWrapper = styled(animated.div)`
+  height: 40%;
+`;
+
 function InfoPager({ isShown }) {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(0);
+  const illustrations = [Illustration1, Illustration2, Illustration3];
+  const returnIllustration = (style, item) => {
+    const Illustration = illustrations[item];
+    return (
+      <IllustrationWrapper style={{ ...style }}>
+        <Illustration height="100%" className="page-image" />
+      </IllustrationWrapper>
+    );
+  };
   const transitions = useTransition(currentPage, {
     exitBeforeEnter: true,
     from: { opacity: 0, transform: "translate3d(100%, 0, 0)" },
@@ -76,12 +92,14 @@ function InfoPager({ isShown }) {
   };
   return (
     <PagerBox $isShown={isShown} className="help-pager">
-      <ReactIllustration size="30%" className="page-image" />
       {transitions((style, item) => {
         return (
-          <animated.div style={{ ...style }}>
-            <p className="page-text">{t(`Help ${item}`)}</p>
-          </animated.div>
+          <>
+            {returnIllustration(style, item)}
+            <animated.div style={{ ...style }}>
+              <p className="page-text">{t(`Help ${item}`)}</p>
+            </animated.div>
+          </>
         );
       })}
 
@@ -96,10 +114,8 @@ function InfoPager({ isShown }) {
           />
         </IconButton>
         <div className="dot-container">
-          {springs.map((props, key) => {
-            return (
-              <animated.div key={key} className="page-dot" style={props} />
-            );
+          {springs.map((props) => {
+            return <animated.div className="page-dot" style={props} />;
           })}
         </div>
         <IconButton onClick={nextPage} disabled={!isShown}>

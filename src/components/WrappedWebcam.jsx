@@ -1,34 +1,17 @@
 import Webcam from "react-webcam";
 import React, { forwardRef } from "react";
 import { useSpring, animated } from "react-spring";
-import { useMediaQuery } from "react-responsive";
 import PropTypes from "prop-types";
-import { useWindowSize } from "./maskguardhooks";
+import { useContainerScale } from "./maskguardhooks";
 import InfoPager from "./InfoPager";
+import { useMediaQuery } from "react-responsive";
 
 const WrappedWebcam = forwardRef((props, ref) => {
   const { isShowingHelp } = props;
-  const windowSize = useWindowSize();
-  const hasPositiveAspectRatio = useMediaQuery({
-    query: "(min-aspect-ratio: 1/1)",
-  });
+  const webcamStyle = useContainerScale();
   const isEven = useMediaQuery({
     query: "(max-aspect-ratio: 21/10) and (min-aspect-ratio: 10/21)",
   });
-
-  let webcamStyle = {};
-
-  if (!hasPositiveAspectRatio) {
-    webcamStyle = {
-      width: 0.9 * windowSize.width,
-      height: (windowSize.width * 0.9 * 3) / 4,
-    };
-  } else {
-    webcamStyle = {
-      height: windowSize.height * 0.7,
-      width: (windowSize.height * 0.7 * 4) / 3,
-    };
-  }
 
   const containerStyle = isShowingHelp ? { zIndex: 1 } : { zIndex: -1 };
 
