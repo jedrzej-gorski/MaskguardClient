@@ -2,9 +2,9 @@ import Webcam from "react-webcam";
 import React, { forwardRef } from "react";
 import { useSpring, animated } from "react-spring";
 import PropTypes from "prop-types";
+import { useMediaQuery } from "react-responsive";
 import { useContainerScale } from "./maskguardhooks";
 import InfoPager from "./InfoPager";
-import { useMediaQuery } from "react-responsive";
 
 const WrappedWebcam = forwardRef((props, ref) => {
   const { isShowingHelp } = props;

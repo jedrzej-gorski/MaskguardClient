@@ -56,6 +56,7 @@ function InfoPager({ isShown }) {
       </IllustrationWrapper>
     );
   };
+
   const transitions = useTransition(currentPage, {
     exitBeforeEnter: true,
     from: { opacity: 0, transform: "translate3d(100%, 0, 0)" },
