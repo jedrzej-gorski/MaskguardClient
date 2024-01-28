@@ -86,7 +86,7 @@ function App() {
     });
     let response;
     try {
-      response = await fetch("http://localhost:5000/predict", {
+      response = await fetch("https://api.mask-guard.net/predict", {
         method: "post",
         body: payload,
         headers: {
