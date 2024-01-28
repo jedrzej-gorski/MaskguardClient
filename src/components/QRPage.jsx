@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 
 const QRWrapper = styled.div`
   width: 90%;
-  height: 60%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,6 +32,7 @@ const Header = styled.h1`
 
 const Counter = styled.div`
   font-size: min(4vmin, 25px);
+  text-align: center;
 `;
 
 const StyledButton = materialStyled(Button)({
