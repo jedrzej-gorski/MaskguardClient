@@ -18,7 +18,8 @@ const Wrapper = styled.div`
 `;
 
 const QRWrapper = styled.div`
-  height: fit-content;
+  width: 90%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,6 +58,7 @@ const Counter = styled.div`
   text-align: center;
   margin: 4px;
   font-size: min(4vmin, 25px);
+  text-align: center;
 `;
 
 const StyledButton = materialStyled(Button)({

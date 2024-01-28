@@ -86,13 +86,14 @@ const MobileInput = forwardRef(({ isShowingHelp, capture }, ref) => {
           style={{ display: "none", height: "90%", width: "100%" }}
           type="file"
           accept="image/*"
-          capture="environment"
+          capture="user"
           onChange={fileLoader}
         />
         <LoadButton onClick={clickRedirect}>
           <MdPhotoCamera size="100%" />
         </LoadButton>
         <Typography
+          onClick={clickRedirect}
           sx={{
             fontSize: "max(min(7vmin, 45px), 22px)",
             position: "relative",
