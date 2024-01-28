@@ -46,12 +46,12 @@ const MainContainer = styled.div`
   justify-content: space-evenly;
   @media (max-aspect-ratio: 21/10) {
     flex-direction: column;
-    height: 100%;
   }
   @media (min-aspect-ratio: 21/10) {
     flex-direction: row;
-    width: 100%;
   }
+  height: 100%;
+  width: 100%;
   gap: 1%;
   align-items: center;
   transition: opacity 0.5s ease-in-out;
@@ -229,7 +229,7 @@ function App() {
               />
             )}
           </WebcamSectionContainer>
-          {!isEven && <InfoContainer />}
+          {!isEven && !token && <InfoContainer />}
         </MainContainer>
         <AboutPage selectedTab={selectedTab} />
       </UIContainer>

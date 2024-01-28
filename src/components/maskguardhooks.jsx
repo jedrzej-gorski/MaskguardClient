@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 
 export function useWindowSize() {
   const [windowSize, updateWindowSize] = useState({
@@ -54,4 +55,43 @@ export function useDeviceDetection() {
   }, []);
 
   return device;
+}
+
+export function useContainerScale(
+  landscapeScale = 0.7,
+  portraitScale = 0.9,
+  auto = false,
+) {
+  const windowSize = useWindowSize();
+  const hasPositiveAspectRatio = useMediaQuery({
+    query: "(min-aspect-ratio: 1/1)",
+  });
+
+  let containerStyle = {};
+
+  if (!hasPositiveAspectRatio) {
+    if (auto) {
+      containerStyle = {
+        width: portraitScale * windowSize.width,
+        height: "auto",
+      };
+    } else {
+      containerStyle = {
+        width: portraitScale * windowSize.width,
+        height: (windowSize.width * portraitScale * 3) / 4,
+      };
+    }
+  } else {
+    if (auto) {
+      containerStyle = {
+        height: windowSize.height * landscapeScale,
+        width: "auto",
+      };
+    }
+    containerStyle = {
+      height: windowSize.height * landscapeScale,
+      width: (windowSize.height * landscapeScale * 4) / 3,
+    };
+  }
+  return containerStyle;
 }

@@ -15,6 +15,11 @@ const FlexContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
+
+const NameItem = styled.p`
+  font-size: min(4vmin, 20px);
+`;
+
 const Logo = styled.span`
   height: 100%;
   font-family: Bavro;
@@ -86,7 +91,9 @@ function AboutPage({ selectedTab }) {
 
   const rows = [];
   for (let i = 0; i < constants.authors.length; i += 1) {
-    rows.push(<p key={constants.authors[i]}>{constants.authors[i]}</p>);
+    rows.push(
+      <NameItem key={constants.authors[i]}>{constants.authors[i]}</NameItem>,
+    );
   }
 
   return (
@@ -109,7 +116,7 @@ function AboutPage({ selectedTab }) {
                   </Logo>
                   <Typography
                     sx={{
-                      fontSize: "min(6vmin, 20px)",
+                      fontSize: "min(5vmin, 20px)",
                       margin: "5px",
                       fontHeight: "0",
                     }}
